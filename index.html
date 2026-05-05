@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>宝贝打卡乐园</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: #fcfaff; color: #444; max-width: 480px; margin: 0 auto; min-height: 100vh; padding-bottom: 100px; }
+
+    .header {
+      background: #ffe6f0; padding: 18px 20px; border-radius: 0 0 24px 24px;
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .header .title { font-size:20px; font-weight:bold; color:#555; }
+    .star-total { font-size:15px; background:rgba(255,255,255,0.6); padding:6px 12px; border-radius:16px; }
+
+    .child-bar {
+      text-align: center; padding: 10px 0 20px;
+    }
+    .child-avatar { font-size: 52px; display: inline-block; animation: bounce 2s infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    .child-name { font-size: 18px; font-weight: bold; color: #555; margin-top: 4px; }
+
+    .card-box { padding:0 16px; }
+    .card {
+      display:block; border-radius:20px; padding:22px 18px; margin-bottom:14px;
+      text-decoration:none; color:#444; box-shadow:0 4px 14px rgba(0,0,0,0.07);
+      transition: transform 0.15s; position: relative; overflow: hidden;
+    }
+    .card:active { transform: scale(0.98); }
+    .card.blue { background:#e6f3ff; }
+    .card.yellow { background:#fff9e6; }
+    .card.pink { background:#ffe6f0; }
+    .card-icon { font-size:32px; margin-bottom:6px; }
+    .card-title { font-size:20px; font-weight:bold; }
+    .card-desc { font-size:13px; color:#777; margin-top:4px; }
+    .card-badge {
+      position:absolute; top:18px; right:18px;
+      background:#ffd700; color:#333; font-size:12px;
+      padding:4px 10px; border-radius:12px; font-weight:bold;
+    }
+
+    .medal-show {
+      display: flex; gap: 8px; justify-content: center; margin-top: 8px;
+    }
+    .medal-badge {
+      background: #fff9e6; padding: 6px 12px; border-radius: 14px;
+      font-size: 13px; color: #886600;
+    }
+
+    /* 底部导航 */
+    .nav-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: white; display: flex; justify-content: space-around;
+      padding: 8px 0 12px; box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+      max-width: 480px; margin: 0 auto;
+    }
+    .nav-item {
+      text-align: center; color: #999; text-decoration: none; font-size: 12px;
+      flex: 1; cursor: pointer;
+    }
+    .nav-item.active { color: #ff8fab; }
+    .nav-icon { font-size: 26px; display: block; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="title">🐻 宝贝打卡乐园</div>
+  <div class="star-total">⭐ <span id="total">0</span></div>
+</div>
+
+<div class="child-bar">
+  <div class="child-avatar" id="child-avatar">👶</div>
+  <div class="child-name" id="child-name">一年级宝贝</div>
+  <div class="medal-show" id="medal-show"></div>
+</div>
+
+<div class="card-box">
+  <a class="card blue" href="pages/checkin.html">
+    <div class="card-icon">🐰</div>
+    <div class="card-title">今日作业打卡</div>
+    <div class="card-desc">点击打卡赚星星</div>
+    <div class="card-badge" id="today-progress">0/5</div>
+  </a>
+  <a class="card yellow" href="pages/stars.html">
+    <div class="card-icon">⭐</div>
+    <div class="card-title">我的星星罐</div>
+    <div class="card-desc">攒够星星换愿望</div>
+  </a>
+  <a class="card pink" href="pages/mine.html">
+    <div class="card-icon">🎁</div>
+    <div class="card-title">家长中心</div>
+    <div class="card-desc">设置与管理</div>
+  </a>
+</div>
+
+<div class="nav-bar">
+  <a class="nav-item active" href="index.html">
+    <span class="nav-icon">🏠</span>
+    首页
+  </a>
+  <a class="nav-item" href="pages/checkin.html">
+    <span class="nav-icon">📝</span>
+    打卡
+  </a>
+  <a class="nav-item" href="pages/mine.html">
+    <span class="nav-icon">👨‍👩‍👧</span>
+    我的
+  </a>
+</div>
+
+<script src="pages/js/app.js"></script>
+<script>
+initHomePage();
+// 渲染勋章
+const medals = getData().medals;
+const medalShow = document.getElementById('medal-show');
+if (medals.length > 0 && medalShow) {
+  medalShow.innerHTML = medals.map(m => `<span class="medal-badge">${m.icon} ${m.name}</span>`).join('');
+}
+</script>
+</body>
+</html>
