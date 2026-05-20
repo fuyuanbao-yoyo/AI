@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>家长中心</title>
-  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <div class="header">
-  <a class="back" href="../index.html">←</a>
-  <div class="title">👨‍👩‍👧 家长中心</div>
+  <div id="child-switcher"></div>
+  <div class="title">家长中心</div>
 </div>
 
 <div class="user-info">
   <div class="avatar" id="edit-child" title="点击修改">👶</div>
-  <div class="name" id="child-name">一年级宝贝</div>
-  <div style="font-size:13px;color:#999;margin-top:4px;">点击头像可修改名字和头像</div>
+  <div class="name" id="child-name">宝贝</div>
+  <div style="font-size:12px;color:var(--color-text-muted);margin-top:4px;">点击头像修改名字和头像</div>
 </div>
 
 <div class="menu-list">
@@ -32,8 +32,16 @@
     📊 打卡统计
     <span class="arrow">›</span>
   </div>
+  <div class="menu-item" id="export-btn">
+    💾 导出数据
+    <span class="arrow">›</span>
+  </div>
+  <div class="menu-item" id="import-btn">
+    📂 导入数据
+    <span class="arrow">›</span>
+  </div>
   <div class="menu-item" id="share-btn">
-    🔗 生成分享链接
+    🔗 分享当前宝贝
     <span class="arrow">›</span>
   </div>
   <div class="menu-item red" id="reset">
@@ -41,31 +49,26 @@
     <span class="arrow">›</span>
   </div>
 </div>
+<input type="file" id="import-file" accept=".json">
 
-<div class="share-box">
-  <p>📱 无需注册，扫码或点击链接即可同步使用</p>
-  <p style="font-size:12px;color:#888;margin-bottom:10px;">生成的链接包含所有数据，家人打开即可看到同样的内容</p>
-  <button id="share-btn2">复制分享链接</button>
-</div>
-
-<div class="nav-bar" style="position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 0 12px;box-shadow:0 -2px 10px rgba(0,0,0,0.06);max-width:480px;margin:0 auto;">
-  <a class="nav-item" href="../index.html" style="text-align:center;color:#999;text-decoration:none;font-size:12px;flex:1;">
-    <span style="font-size:26px;display:block;margin-bottom:2px;">🏠</span>首页
+<div class="nav-bar">
+  <a class="nav-item" href="../index.html">
+    <span class="nav-icon">🏠</span>首页
   </a>
-  <a class="nav-item" href="checkin.html" style="text-align:center;color:#999;text-decoration:none;font-size:12px;flex:1;">
-    <span style="font-size:26px;display:block;margin-bottom:2px;">📝</span>打卡
+  <a class="nav-item" href="checkin.html">
+    <span class="nav-icon">📝</span>打卡
   </a>
-  <a class="nav-item" href="mine.html" style="text-align:center;color:#ff8fab;text-decoration:none;font-size:12px;flex:1;">
-    <span style="font-size:26px;display:block;margin-bottom:2px;">👨‍👩‍👧</span>我的
+  <a class="nav-item" href="rank.html">
+    <span class="nav-icon">🏆</span>排行
+  </a>
+  <a class="nav-item active" href="mine.html">
+    <span class="nav-icon">👨‍👩‍👧</span>我的
   </a>
 </div>
 
 <script src="js/app.js"></script>
 <script>
 initMinePage();
-// 分享按钮2
-const share2 = document.getElementById('share-btn2');
-if (share2) share2.addEventListener('click', copyShareLink);
 </script>
 </body>
 </html>

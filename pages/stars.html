@@ -4,13 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>我的星星罐</title>
-  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <div class="header">
-  <a class="back" href="../index.html">←</a>
-  <div class="title">⭐ 我的星星罐</div>
+  <div id="child-switcher"></div>
   <div class="star-total">⭐ <span id="total">0</span></div>
 </div>
 
@@ -22,10 +21,7 @@
 
 <div class="wish-box">
   <div class="wish-title">🎯 愿望兑换</div>
-  <div class="wish-list" id="wish-list">
-    <!-- 由 JS 动态渲染 -->
-  </div>
-  <!-- 自定义愿望入口已移至家长中心->愿望管理 -->
+  <div class="wish-list" id="wish-list"></div>
 </div>
 
 <div class="exchanged-box" id="exchanged-box"></div>
@@ -35,22 +31,24 @@
   <div id="history-list"></div>
 </div>
 
-<div class="nav-bar" style="position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 0 12px;box-shadow:0 -2px 10px rgba(0,0,0,0.06);max-width:480px;margin:0 auto;">
-  <a class="nav-item" href="../index.html" style="text-align:center;color:#999;text-decoration:none;font-size:12px;flex:1;">
-    <span style="font-size:26px;display:block;margin-bottom:2px;">🏠</span>首页
+<div class="nav-bar">
+  <a class="nav-item" href="../index.html">
+    <span class="nav-icon">🏠</span>首页
   </a>
-  <a class="nav-item" href="checkin.html" style="text-align:center;color:#999;text-decoration:none;font-size:12px;flex:1;">
-    <span style="font-size:26px;display:block;margin-bottom:2px;">📝</span>打卡
+  <a class="nav-item" href="checkin.html">
+    <span class="nav-icon">📝</span>打卡
   </a>
-  <a class="nav-item" href="mine.html" style="text-align:center;color:#999;text-decoration:none;font-size:12px;flex:1;">
-    <span style="font-size:26px;display:block;margin-bottom:2px;">👨‍👩‍👧</span>我的
+  <a class="nav-item" href="rank.html">
+    <span class="nav-icon">🏆</span>排行
+  </a>
+  <a class="nav-item" href="mine.html">
+    <span class="nav-icon">👨‍👩‍👧</span>我的
   </a>
 </div>
 
 <script src="js/app.js"></script>
 <script>
 initStarsPage();
-// 更新顶部星星
 const totalEl = document.getElementById('total');
 if(totalEl) totalEl.innerText = getStars();
 // 渲染勋章
