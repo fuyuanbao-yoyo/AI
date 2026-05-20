@@ -241,16 +241,22 @@ function showChildSwitcher() {
           <div class="switch-card-name">${child.name}</div>
           <div class="switch-card-sub">${subtitle}</div>
         </div>
-        ${isCurrent ? '<div class="switch-card-check">✓</div>' : ''}
+        <div class="switch-card-actions">
+          <button class="switch-edit-btn" data-edit-id="${child.id}" title="编辑">✏️</button>
+          ${children.length > 1 ? `<button class="switch-del-btn" data-del-id="${child.id}" title="删除">🗑️</button>` : ''}
+          ${isCurrent ? '<span class="switch-card-check">✓</span>' : ''}
+        </div>
       </div>
     `;
   });
   html += `<div class="switch-card add-card" id="add-child-btn"><span class="add-icon">＋</span><span>添加宝贝</span></div>`;
 
   const sheet = showBottomSheet({ title: '切换宝贝', content: html });
-  // 绑定切换事件
+  // 绑定切换事件（点击卡片主体切换）
   sheet.querySelectorAll('.switch-card[data-id]').forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      // 如果点击的是编辑/删除按钮，不触发切换
+      if (e.target.closest('.switch-edit-btn') || e.target.closest('.switch-del-btn')) return;
       const id = card.dataset.id;
       if (id !== currentId) {
         switchChild(id);
@@ -260,10 +266,77 @@ function showChildSwitcher() {
       }
     });
   });
+  // 编辑按钮
+  sheet.querySelectorAll('.switch-edit-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.editId;
+      sheet._close();
+      setTimeout(() => showEditChildModalById(id), 350);
+    });
+  });
+  // 删除按钮
+  sheet.querySelectorAll('.switch-del-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.delId;
+      const child = _appData.children.find(c => c.id === id);
+      showConfirm({
+        title: '删除宝贝',
+        message: `确定要删除「${child.name}」的所有数据吗？<br>此操作不可恢复！`,
+        icon: '⚠️',
+        onConfirm: () => {
+          removeChild(id);
+          sheet._close();
+          location.reload();
+        }
+      });
+    });
+  });
   // 添加宝贝
   sheet.querySelector('#add-child-btn').addEventListener('click', () => {
     sheet._close();
     showAddChildModal();
+  });
+}
+
+// 通过 ID 编辑指定孩子
+function showEditChildModalById(childId) {
+  const child = _appData.children.find(c => c.id === childId);
+  if (!child) return;
+  const emojis = ['👶','👧','🧒','👦','👸','🤴','🎀','🌸','🦄','🐰','🐻','🌈'];
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-box add-child-modal">
+      <div class="modal-close" id="close-edit-child">✕</div>
+      <div class="modal-title">编辑宝贝</div>
+      <div class="emoji-picker">
+        ${emojis.map(e => `<div class="emoji-option ${e === child.avatar ? 'selected' : ''}" data-emoji="${e}">${e}</div>`).join('')}
+      </div>
+      <div class="selected-avatar" id="selected-avatar">${child.avatar}</div>
+      <input type="text" class="child-name-input" id="edit-child-name" placeholder="请输入宝贝的名字" maxlength="10" value="${child.name}">
+      <button class="modal-btn ok full-width" id="confirm-edit-child">保存</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  let selectedEmoji = child.avatar;
+  overlay.querySelectorAll('.emoji-option').forEach(el => {
+    el.addEventListener('click', () => {
+      selectedEmoji = el.dataset.emoji;
+      document.getElementById('selected-avatar').textContent = selectedEmoji;
+      overlay.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+    });
+  });
+  overlay.querySelector('#close-edit-child').addEventListener('click', () => overlay.remove());
+  overlay.querySelector('#confirm-edit-child').addEventListener('click', () => {
+    const name = document.getElementById('edit-child-name').value.trim();
+    if (!name) { document.getElementById('edit-child-name').focus(); return; }
+    updateChildInfo(childId, name, selectedEmoji);
+    overlay.remove();
+    location.reload();
   });
 }
 
@@ -857,7 +930,7 @@ function initMinePage() {
   initPageCommon();
   const child = getCurrentChild();
   const nameEl = document.getElementById('child-name');
-  const avatarEl = document.getElementById('child-avatar');
+  const avatarEl = document.getElementById('edit-child');
   if (nameEl) nameEl.innerText = child.name;
   if (avatarEl) avatarEl.innerText = child.avatar;
 
